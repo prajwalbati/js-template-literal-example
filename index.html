@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>JS Template Literal Example</title>
+    <style>
+        #card {
+            width: 500px;
+            margin: 0 auto;
+        }
+        .property {
+          display:grid;
+          grid-template-columns:100px 250px;
+          font-size:10pt;
+          margin:5px;
+          padding:5px;
+        }
+        .property:nth-child(2n){background-color:#e0e0ff}
+        article.example {
+          display:block;
+          width:500px;
+          border:inset 2px lightGray;
+          padding:20px;
+          font-family: Arial;
+        }
+        article.example h1 {font-size:18pt;}
+        .label {font-weight:bold;}
+        .label::after {content:': '}
+        .value {font-style:italic}
+        .property img {max-width:250px;}
+    </style>
+</head>
+<body>
+    <div id="card"></div>
+
+
+    <script type="text/javascript">
+        var npc = {
+            name:"Jane Doe",
+            properties:[
+                {label:"Vocation",value:"writer",key:"vocation",datatype:"string"},
+                {label:"Gender",value:"female",key:"gender",datatype:"string"},
+                {label:"Setting",value:"1910s Edwardian Mystery",key:"setting",datatype:"string"},
+                {label:"Age",value:24,key:"age",datatype:"integer"},
+                {label:"Description",key:"description",datatype:"extString",value:"Miss Doe is a writer of mystery novels whose sometimes flighty demeanor disguises a keen intellect and excellent powers of observation."},
+                {label:"Image",value:"https://s3-us-west-2.amazonaws.com/s.cdpn.io/620300/Laura.png",key:"image",datatype:"image"}
+            ]
+        };
+
+        var templates = {
+            npcTemplate:(npc)=>`<article class="example">
+                <header><h1>${npc.name}</h1></header>
+                <div class="propertyList">
+                    ${npc.properties.map((property)=>property.datatype==='image'?templates.imageTemplate(property):templates.propertyTemplate(property)).join('\n')}    
+                </div>
+            </article>`,
+            propertyTemplate:(property)=>`<div class="property">
+                <div class="label">${property.label}</div>
+                <div class="value">${property.value}</div>
+            </div>`,
+            imageTemplate:(property)=>`<div class="property">
+                <div class="label">${property.label}</div>
+                <div class="image"><img src="${property.value}"/></div>
+            </div>`
+        };
+
+        var card = document.querySelector('#card');
+        card.innerHTML = templates.npcTemplate(npc);
+    </script>
+</body>
+</html>
